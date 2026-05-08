@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="ForCodeGenerator/ForCodeGenerator.csproj" Id="cb74e022-6a5b-4c01-948a-1b74a4fb2b0f" />
+  <Project Path="SMS.Business/SMS.Business.csproj" />
+  <Project Path="SMS.Core/SMS.Core.csproj" />
+  <Project Path="SMS.DataAccess/SMS.DataAccess.csproj" />
+  <Project Path="SMS.WebAPI/SMS.WebAPI.csproj" />
+</Solution>

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="PersonServices\ImageHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PersonServices\DTOs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SMS.Core\SMS.Core.csproj" />
+    <ProjectReference Include="..\SMS.DataAccess\SMS.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>
