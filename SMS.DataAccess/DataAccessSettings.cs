@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Runtime.CompilerServices;
 
-namespace SMS.DataAccess
+namespace SMS.Infrastructure
 {
     public static class DataAccessSettings
     {

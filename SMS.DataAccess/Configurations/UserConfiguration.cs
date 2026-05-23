@@ -3,11 +3,11 @@
 
 using System;
 using System.Collections.Generic;
-using  SMS.Core.Entities;
+using  SMS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace SMS.DataAccess.Configurations;
+namespace SMS.Infrastructure.Configurations;
 
 public partial class UserConfiguration : IEntityTypeConfiguration<User>
 {

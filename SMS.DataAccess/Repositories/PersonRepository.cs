@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SMS.Core.Entities;
-using System.Numerics;
+using SMS.Application.Interfaces.Repositories;
+using SMS.Domain.Entities;
 
-namespace SMS.DataAccess
+namespace SMS.Infrastructure
 {
-    public class PersonRepository
+    public class PersonRepository : IPersonRepository
     {
         private readonly AppDbContext _context;
         public PersonRepository(AppDbContext context)
@@ -12,39 +12,26 @@ namespace SMS.DataAccess
             _context = context;
         }
 
-        public Task<Person?> GetPersonByID(int Id, bool Tracking = false)
+        public Task<Person?> GetPersonById(int id, bool tracking = false, CancellationToken ct = default)
         {
             var Query = _context.People.AsQueryable();
-            
-            if (!Tracking) Query = Query.AsNoTracking();
+
+            if (!tracking) Query = Query.AsNoTracking();
 
             return Query.Include(p => p.Country)
-                .SingleOrDefaultAsync(p => p.PersonID == Id);
-        }
-         
-        public async Task<int> AddPerson(Person person)
-        {
-            _context.People.Add(person);
-
-            await _context.SaveChangesAsync();
-
-            return person.PersonID;
+                .SingleOrDefaultAsync(p => p.PersonID == id);
         }
 
-        public async Task<bool> UpdatePerson(Person person)
-        {
-            _context.People.Update(person);
+        public void AddPerson(Person person)
+        => _context.People.Add(person);
+        
+        public void UpdatePerson(Person person)
+        =>  _context.People.Update(person);
 
-            if (await _context.SaveChangesAsync() > 0)
-                return true;
-            
-            return false;
-        }
-
-        public Task<bool> IsNationalNumberExist(string nationalNumber)
+        public Task<bool> IsNationalNumberExist(string nationalNumber, CancellationToken ct = default)
             => _context.People.AnyAsync(p => p.NationalNumber == nationalNumber);
 
-        public async Task<bool> IsPhoneNumberExist(string? phoneNumber)
+        public async Task<bool> IsPhoneNumberExist(string? phoneNumber, CancellationToken ct = default)
         {
             if (phoneNumber is null)
                 return false;
@@ -52,10 +39,17 @@ namespace SMS.DataAccess
             return await _context.People.AnyAsync(p => p.PhoneNumber == phoneNumber);
         }
             
-
-
-        public Task<bool> IsNationalNumberReserved(int personID, string nationalNumber)
+        public Task<bool> IsNationalNumberReserved(int personID, string nationalNumber, CancellationToken ct = default)
             => _context.People.AnyAsync(p => p.NationalNumber == nationalNumber &&  p.PersonID != personID);
+
+        public async Task<bool> IsPhoneNumberReserved(int personID, string? phoneNumber, CancellationToken ct = default)
+        {
+            if (phoneNumber is null)
+                return false;
+
+            return await _context.People.AnyAsync(p => p.PhoneNumber == phoneNumber && p.PersonID != personID);
+        }
+
 
 
         //  => _dapperHelper.IsPositivResult("sp_People_IsNationalNumberReserved", new { PersonID = personID, NationalNumber = nationalNumber });

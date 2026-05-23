@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SMS.Business.Util;
-using SMS.Business.Util.ErrorCodes;
+using SMS.Domain.Enums;
+using SMS.Domain.Util;
 using System.Diagnostics;
-using static SMS.Business.Util.Result;
 
 namespace PeopleAPIServer
 {
@@ -13,7 +12,7 @@ namespace PeopleAPIServer
             if (result.IsSuccess)
                 return controller.Ok(result.Data);
 
-            int statusCode = result.BaseErrorCode.GetStatusCode();
+            int statusCode = result.ErrorType.GetStatusCode();
             string traceId = Activity.Current?.TraceId.ToString()
                                 ?? controller.HttpContext.TraceIdentifier;
 
@@ -25,17 +24,31 @@ namespace PeopleAPIServer
             if (result.IsSuccess)
                 return controller.NoContent();
 
-            int statusCode = result.BaseErrorCode.GetStatusCode();
+            int statusCode = result.ErrorType.GetStatusCode();
             string traceId = Activity.Current?.TraceId.ToString()
                                 ?? controller.HttpContext.TraceIdentifier;
 
             return controller.StatusCode(statusCode, ApiResponse.Build(statusCode, traceId, result.Errors));
         }
+
+        static int GetStatusCode(this ErrorType type) => type switch
+        {
+            ErrorType.Validation => 422,
+            ErrorType.NotFound => 404,
+            ErrorType.AlreadyExists => 409,
+            ErrorType.Reserved => 409,
+            ErrorType.InternalError => 500,
+            ErrorType.UnsupportedMediaType => 415,
+            ErrorType.NotImplemented => 501,
+            ErrorType.SizeExceedsLimit => 413,
+
+            _ => 500
+        };
     }
 
     public static class ApiResponse
     {
-        public static object Build(int status, string traceId, IEnumerable<ErrorDetail> errors)
+        public static object Build(int status, string traceId, IEnumerable<Error> errors)
             => new
             {
                 status,
@@ -43,8 +56,9 @@ namespace PeopleAPIServer
                 errors = errors.Select(e => new
                 {
                     message = e.Message,
-                    code = (int)e.Code,
-                    e.Field
+                    e.Field,
+                    code = e.ErrorCode,
+                    e.Metadata
                 })
             };
     }

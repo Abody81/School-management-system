@@ -1,4 +1,4 @@
-﻿namespace SMS.Core.Entities;
+﻿namespace SMS.Domain.Entities;
 
 public partial class Enrollment
 {

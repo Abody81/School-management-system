@@ -1,8 +1,8 @@
 ﻿#nullable enable
 
-using SMS.Core.Entities;
+using SMS.Domain.Entities;
 
-namespace  SMS.Core.Entities;
+namespace  SMS.Domain.Entities;
 
 public partial class StudentGrade
 {

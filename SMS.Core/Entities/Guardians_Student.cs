@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace  SMS.Core.Entities;
+namespace  SMS.Domain.Entities;
 
 public partial class Guardians_Student
 {

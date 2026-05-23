@@ -1,7 +1,7 @@
 ﻿using SMS.Business.Util;
-using SMS.DataAccess;
+using SMS.Infrastructure;
 using System.Text.RegularExpressions;
-using SMS.Core.Entities;
+using SMS.Domain.Entities;
 using SMS.Business.Util.ErrorCodes;
 
 namespace SMS.Business.PersonServices

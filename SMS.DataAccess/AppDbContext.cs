@@ -3,11 +3,11 @@
 
 using System;
 using System.Collections.Generic;
-using SMS.Core.Entities;
+using SMS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
-namespace SMS.DataAccess;
+namespace SMS.Infrastructure;
 
 [DebuggerStepThrough]
 public partial class AppDbContext : DbContext

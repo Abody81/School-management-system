@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SMS.Core.Entities;
+using SMS.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;

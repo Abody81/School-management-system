@@ -1,12 +1,12 @@
 ﻿#pragma warning disable
 
-using SMS.Core.Attributes;
-using SMS.Core.Entities;
+using SMS.Domain.Attributes;
+using SMS.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace SMS.WebAPI.DTOs.PersonDTOs
 {
-    public class PersonResponseDTO
+    public class PersonResponse
     {
         public int PersonID { get; set; }
 

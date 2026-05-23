@@ -2,7 +2,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace SMS.Core.Attributes
+namespace SMS.Domain.Attributes
 {
     public class MinAge : ValidationAttribute
     {

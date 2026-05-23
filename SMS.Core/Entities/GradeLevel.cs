@@ -1,7 +1,7 @@
-﻿using SMS.Core.Entities;
+﻿using SMS.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace SMS.Core.Entities
+namespace SMS.Domain.Entities
 {
     public class GradeLevel
     {

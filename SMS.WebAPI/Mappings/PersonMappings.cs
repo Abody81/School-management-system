@@ -1,22 +1,24 @@
 ﻿using AutoMapper;
-using SMS.Core.Entities;
+using SMS.Application.UseCases.People.Commands.CreatePerson;
+using SMS.Domain.Entities;
 using SMS.WebAPI.DTOs.PersonDTOs;
 
 namespace SMS.WebAPI.Mappings
 {
-    public class MappingProfile : Profile
+    public class PersonMappings: Profile
     {
-        public MappingProfile()
+        public PersonMappings()
         {
-            CreateMap<Person, PersonResponseDTO>()
+            CreateMap<Person, PersonResponse>()
                 .ForMember(dest => dest.ImageURl, opt => opt.MapFrom(src => src.ImagePath)).
                  ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country.CountryName));  // dest => destination (الهدف) , src => source
 
-            CreateMap<PersonCreateDTO, Person>();
+            CreateMap<CreatePersonRequest, CreatePersonCommand>();
 
-            CreateMap<PersonUpdateDTO, Person>();
+            CreateMap<UpdatePersonRequest, Person>();
                 
         }
     }
+    
 }
 

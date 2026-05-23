@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace  SMS.Core.Entities;
+namespace  SMS.Domain.Entities;
 
 public partial class Track
 {

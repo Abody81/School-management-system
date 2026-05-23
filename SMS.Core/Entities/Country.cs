@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SMS.Core.Entities
+namespace SMS.Domain.Entities
 {
     public class Country
     {

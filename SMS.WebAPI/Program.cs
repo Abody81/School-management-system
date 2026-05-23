@@ -2,13 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PeopleAPIServer;
 using Scalar.AspNetCore;
-using SMS.Business.PersonServices;
-using SMS.Business.PersonServices.Mappings;
-using SMS.Business.Util.ErrorCodes;
-using SMS.DataAccess;
+using SMS.Domain.Enums;
+using SMS.Application;
+using SMS.Infrastructure;
 using SMS.WebAPI.Mappings;
 using System.Diagnostics;
-using static SMS.Business.Util.Result;
+using System.Text.Json.Serialization;
+using SMS.Application.UseCases.People.Commands.CreatePerson;
+using SMS.Domain.Util;
+
 
 namespace SMS.WebAPI
 {
@@ -22,25 +24,22 @@ namespace SMS.WebAPI
 
             builder.Services.AddOpenApi();
 
-            builder.Services.AddAutoMapper(cfg =>
+            builder.Services.AddControllers().AddJsonOptions(options =>
             {
-                cfg.AddProfile<MappingProfile>();
-                cfg.AddProfile<PersonMappings>();
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
 
-            Dependencies(builder);
-
-            builder.Services.AddControllers()
-       .ConfigureApiBehaviorOptions(options =>
-       {
-           options.InvalidModelStateResponseFactory = context =>
-           {
+            builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+            {
+             options.InvalidModelStateResponseFactory = context =>
+            {
                var errors = context.ModelState
                    .Where(e => e.Value?.Errors.Any() == true)
                    .SelectMany(e => e.Value!.Errors
-                       .Select(err => new ErrorDetail(
+                       .Select(err => new Error(
+                           ErrorType.Validation,
+                           "VALIDATION_ERROR",
                            err.ErrorMessage,
-                           ErrorCode.ValidationError,
                            e.Key)))
                    .ToList();
 
@@ -50,7 +49,14 @@ namespace SMS.WebAPI
                return new BadRequestObjectResult(
                    ApiResponse.Build(400, traceId, errors));
            };
-       });
+           });
+
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<PersonMappings>();
+            });
+
+            Dependencies(builder);
 
             var app = builder.Build();
 
@@ -73,14 +79,14 @@ namespace SMS.WebAPI
 
         public static void Dependencies(WebApplicationBuilder builder)
         {
-            string ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-           ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(ConnectionString));
+            builder.Services.AddApplication()
+                .AddInfrastructure(connectionString);
 
-            builder.Services.AddScoped<PersonRepository>();
-            builder.Services.AddScoped<PersonService>();
-            builder.Services.AddScoped<PersonValidator>();
+            builder.Services.AddScoped<AddPersonUseCase>();
+
         }
     }
 }

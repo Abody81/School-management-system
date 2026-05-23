@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using SMS.Business.Util;
 using SMS.Business.Util.ErrorCodes;
-using SMS.Core.Entities;
-using SMS.DataAccess;
+using SMS.Domain.Entities;
+using SMS.Infrastructure;
 
 namespace SMS.Business.PersonServices
 {

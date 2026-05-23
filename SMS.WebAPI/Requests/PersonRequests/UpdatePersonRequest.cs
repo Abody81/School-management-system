@@ -1,9 +1,9 @@
-﻿using SMS.Core.Attributes;
+﻿using SMS.Domain.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace SMS.WebAPI.DTOs.PersonDTOs
 {
-    public class PersonCreateDTO
+    public class UpdatePersonRequest
     {
         [Required(ErrorMessage = "First name is required.")]
         [StringLength(20, ErrorMessage = "First name cannot exceed 20 characters.")]
@@ -49,7 +49,7 @@ namespace SMS.WebAPI.DTOs.PersonDTOs
 
 
         [StringLength(12, MinimumLength = 8, ErrorMessage = "Phone number must be between 8 and 12 characters.")]
-        public string? PhoneNumber { get; set; } 
+        public string PhoneNumber { get; set; } = null!;
 
 
         [Required(ErrorMessage = "Country ID is required.")]
@@ -61,12 +61,8 @@ namespace SMS.WebAPI.DTOs.PersonDTOs
         [StringLength(200, ErrorMessage = "Address cannot exceed 200 characters.")]
         public string Address { get; set; } = null!;
 
+        public IFormFile? ImageFile { get; set; } 
 
-        [Required(ErrorMessage = "Image is required.")]
-        public IFormFile ImageFile { get; set; } = null!;
     }
 }
-    
-
-
 
