@@ -14,9 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SMS.Application\SMS.Application.csproj" />
-    <ProjectReference Include="..\SMS.Business\SMS.Business.csproj" />
-    <ProjectReference Include="..\SMS.Core\SMS.Domain.csproj" />
-    <ProjectReference Include="..\SMS.DataAccess\SMS.Infrastructure.csproj" />
+    <ProjectReference Include="..\SMS.Domain\SMS.Domain.csproj" />
+    <ProjectReference Include="..\SMS.Infrastructure\SMS.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

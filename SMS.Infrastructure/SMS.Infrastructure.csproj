@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SMS.Application\SMS.Application.csproj" />
-    <ProjectReference Include="..\SMS.Core\SMS.Domain.csproj" />
+    <ProjectReference Include="..\SMS.Domain\SMS.Domain.csproj" />
   </ItemGroup>
 
 </Project>
