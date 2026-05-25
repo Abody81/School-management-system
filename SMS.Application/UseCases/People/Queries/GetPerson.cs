@@ -5,7 +5,7 @@ using SMS.Domain.Util;
 
 namespace SMS.Application.UseCases.People.Queries;
 
-public class GetPersonUseCase(IPersonRepository _repo, ILogger<GetPersonUseCase> _logger)
+public class GetPerson(IPersonRepository _repo, ILogger<GetPerson> _logger)
 {
     public async Task<Result<Person>> ExecuteAsync(int personId)
     {

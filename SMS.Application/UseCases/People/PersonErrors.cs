@@ -55,4 +55,6 @@ public static class PersonErrors
     public static readonly Error InternalError = new Error(ErrorType.InternalError, "INTERNAL_ERROR",
        "An internal error occurred.");
 
+    public static readonly Error DatabaseFailure = new Error(ErrorType.InternalError, "DATABASE_FAILURE",
+      "An internal error occurred in database.");
 }

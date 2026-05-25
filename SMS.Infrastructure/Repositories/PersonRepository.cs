@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ADO_Helper;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using SMS.Application.Interfaces.Repositories;
 using SMS.Domain.Entities;
+using System.Runtime.CompilerServices;
 
 namespace SMS.Infrastructure
 {
@@ -50,17 +53,21 @@ namespace SMS.Infrastructure
             return await _context.People.AnyAsync(p => p.PhoneNumber == phoneNumber && p.PersonID != personID);
         }
 
+        public Task<bool> IsPersonExists(int personId)
+        => _context.People.AnyAsync(p => p.PersonID == personId);
 
+        public Task<int> Delete(int personId)
+        => _context.People.Where(p => p.PersonID == personId).ExecuteDeleteAsync();
 
-        //  => _dapperHelper.IsPositivResult("sp_People_IsNationalNumberReserved", new { PersonID = personID, NationalNumber = nationalNumber });
+        /// <remarks>
+        /// In this operation you MUST call UnitOfWork.SaveChangesAsync() afterwards to persist changes.
+        /// </remarks>
+        public void StagedDelete(Person person)
+        => _context.People.Remove(person);
 
-        //public Task<bool> DeletePerson(int id)
-        //    => _dapperHelper.Delete("sp_People_Delete", id);
-
-        //public Task<bool> IsPersonExists(int id)
-        //    => _dapperHelper.IsExist("sp_People_IsExist", id);
-
-
+        public Task<string?> GetImagePath(int personId)
+        => _context.People.Where(p => p.PersonID == personId).Select(p => p.ImagePath).SingleOrDefaultAsync();
+            
 
         //public Task<bool> HasPhoneNumber(int personID)
         //  => _dapperHelper.IsPositivResult("sp_People_HasPhoneNumber", new { PersonID = personID });

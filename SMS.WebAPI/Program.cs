@@ -85,7 +85,7 @@ namespace SMS.WebAPI
             builder.Services.AddApplication()
                 .AddInfrastructure(connectionString);
 
-            builder.Services.AddScoped<AddPersonUseCase>();
+            builder.Services.AddScoped<CreatePersonUseCase>();
 
         }
     }

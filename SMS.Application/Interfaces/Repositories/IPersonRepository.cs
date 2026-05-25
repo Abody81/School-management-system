@@ -11,4 +11,12 @@ public interface IPersonRepository
     Task<bool> IsPhoneNumberExist(string? phoneNumber, CancellationToken ct = default);
     Task<bool> IsNationalNumberReserved(int personID, string nationalNumber, CancellationToken ct = default);
     Task<bool> IsPhoneNumberReserved(int personID, string? phoneNumber, CancellationToken ct = default);
+    Task<int> Delete(int personId);
+
+    /// <remarks>
+    /// In this operation you MUST call UnitOfWork.SaveChangesAsync() afterwards to persist changes.
+    /// </remarks>
+    void StagedDelete(Person person);
+    Task<string> GetImagePath(int personId);
+
 }

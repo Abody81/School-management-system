@@ -1,4 +1,5 @@
 ﻿using SMS.Application.UseCases.People.Commands.CreatePerson;
+using SMS.Application.UseCases.People.Commands.DeletePerson;
 using SMS.Application.UseCases.People.Commands.UpdatePerson;
 using SMS.Application.UseCases.People.Queries;
 
@@ -6,16 +7,18 @@ namespace SMS.Application.Services;
 
 public class PersonService
 {
-    public AddPersonUseCase Add { get; }
+    public CreatePersonUseCase Add { get; }
     public UpdatePersonUseCase Update { get; }
-    public GetPersonUseCase Get { get; }
+    public GetPerson Get { get; }
     public GetPersonImage GetImage { get; }
+    public DeletePersonUseCase Delete { get; }
 
     public PersonService(
-        AddPersonUseCase add,
+        CreatePersonUseCase add,
         UpdatePersonUseCase update,
-        GetPersonUseCase get,
-        GetPersonImage getImage
+        GetPerson get,
+        GetPersonImage getImage,
+        DeletePersonUseCase delete
         )
 
     {
@@ -23,5 +26,6 @@ public class PersonService
         Update = update;
         Get = get;
         GetImage = getImage;
+        Delete = delete;
     }
 }

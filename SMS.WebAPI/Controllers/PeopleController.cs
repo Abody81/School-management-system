@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
 using PeopleAPIServer;
 using SMS.Application.Services;
 using SMS.Application.UseCases.People.Commands.CreatePerson;
-using SMS.Domain.Entities;
+using SMS.Application.UseCases.People.Commands.DeletePerson;
 using SMS.WebAPI.DTOs.PersonDTOs;
 
 namespace SMS.WebAPI.Controllers
@@ -72,6 +71,7 @@ namespace SMS.WebAPI.Controllers
 
         [HttpPut("{Id}")]
         [Consumes("multipart/form-data")]
+        [RequestFormLimits(MultipartBoundaryLengthLimit = 5302880)]
         public async Task<ActionResult> UpdatePerson([FromRoute] int Id, [FromForm] UpdatePersonRequest request)
         {
             await using var ImageStream = request.ImageFile?.OpenReadStream(); // Stream will close automatically after the operation, because of the await using statement.
@@ -82,6 +82,16 @@ namespace SMS.WebAPI.Controllers
 
             var result = await _personService.Update.ExecuteAsync(Command);
 
+            return this.ToActionResult(result);
+        }
+
+
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult> DeletePerson([FromRoute] int Id)
+        {
+            var Command  = new DeletePersonCommand(Id);
+
+            var result = await _personService.Delete.ExecuteAsync(Command);
             return this.ToActionResult(result);
         }
 

@@ -8,10 +8,10 @@ using SMS.Domain.Util;
 
 namespace SMS.Application.UseCases.People.Commands.CreatePerson;
 
-public class AddPersonUseCase(
+public class CreatePersonUseCase(
     IPersonRepository _repo,
     IImageService _imageService,
-    ILogger<AddPersonUseCase> _logger,
+    ILogger<CreatePersonUseCase> _logger,
     IUnitOfWork _uow
     )
 {

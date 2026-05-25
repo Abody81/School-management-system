@@ -9,7 +9,7 @@ namespace SMS.Infrastructure.Services;
 
 public class ImageService : IImageService
 {
-    private readonly string _folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Pictures");
+    private readonly string _folderPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Pictures");
 
     private const long MaxFileSizeBytes = Rules.MaxImageSizeBytes;
 
