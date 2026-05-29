@@ -366,3 +366,5 @@ FodyWeavers.xsd
 ConsoleApp1
 ForCodeGenerator
 Pictures
+/ForTest/ForTest.csproj
+/InfraTest/InfraTest.csproj

@@ -16,13 +16,13 @@ public class CreatePersonUseCase(
     )
 {
 
-    public async Task<Result<int>> ExecuteAsync(CreatePersonCommand personCommand)
+    public async Task<Result<int>> ExecuteAsync(CreatePersonCommand personCommand, CancellationToken ct)
     {
         string? savedImagePath = null;
 
         try
         {
-            var ValidateResult = await UniqueValidationAsync(personCommand);
+            var ValidateResult = await UniqueValidationAsync(personCommand ,ct);
             if (!ValidateResult.IsSuccess) return Result<int>.Failure(ValidateResult);
 
             var ImageResult = await HandleImage(personCommand.Image);
@@ -51,19 +51,19 @@ public class CreatePersonUseCase(
         }
     }
 
-    private async Task<Result> UniqueValidationAsync(CreatePersonCommand command)
+    private async Task<Result> UniqueValidationAsync(CreatePersonCommand command, CancellationToken ct)
     {
         var Result = new Result(ErrorType.AlreadyExists); // by default is Success but when add use AddError change to !Success
 
         if (!string.IsNullOrEmpty(command.PhoneNumber))
         {
-            var IsPhoneNumberExist = await _repo.IsPhoneNumberExist(command.PhoneNumber);
+            var IsPhoneNumberExist = await _repo.IsPhoneNumberExist(command.PhoneNumber, ct);
 
             if (IsPhoneNumberExist)
                 Result.AddError(PersonErrors.PhoneNumberAlreadyExists);
         }
 
-        var IsNationalNumberExist = await _repo.IsNationalNumberExist(command.NationalNumber);
+        var IsNationalNumberExist = await _repo.IsNationalNumberExist(command.NationalNumber, ct);
 
         if (IsNationalNumberExist)
             Result.AddError(PersonErrors.NationalNumberAlreadyExists);

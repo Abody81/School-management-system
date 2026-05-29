@@ -12,10 +12,6 @@ namespace SMS.WebAPI.Mappings
             CreateMap<Person, PersonResponse>()
                 .ForMember(dest => dest.ImageURl, opt => opt.MapFrom(src => src.ImagePath)).
                  ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country.CountryName));  // dest => destination (الهدف) , src => source
-
-            CreateMap<CreatePersonRequest, CreatePersonCommand>();
-
-            CreateMap<UpdatePersonRequest, Person>();
                 
         }
     }

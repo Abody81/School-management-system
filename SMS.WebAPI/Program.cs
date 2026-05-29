@@ -8,9 +8,7 @@ using SMS.Infrastructure;
 using SMS.WebAPI.Mappings;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
-using SMS.Application.UseCases.People.Commands.CreatePerson;
 using SMS.Domain.Util;
-
 
 namespace SMS.WebAPI
 {
@@ -51,10 +49,10 @@ namespace SMS.WebAPI
            };
            });
 
-            builder.Services.AddAutoMapper(cfg =>
+            builder.Services.AddMiniProfiler(options =>
             {
-                cfg.AddProfile<PersonMappings>();
-            });
+                options.RouteBasePath = "/profiler"; //https://localhost:7185/profiler/results-index
+            }).AddEntityFramework();
 
             Dependencies(builder);
 
@@ -66,6 +64,8 @@ namespace SMS.WebAPI
                 app.MapOpenApi();
 
                 app.MapScalarApiReference();
+
+                app.UseMiniProfiler();
             }
 
             app.UseHttpsRedirection();
@@ -80,13 +80,15 @@ namespace SMS.WebAPI
         public static void Dependencies(WebApplicationBuilder builder)
         {
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            ?? throw new InvalidOperationException();
 
             builder.Services.AddApplication()
                 .AddInfrastructure(connectionString);
 
-            builder.Services.AddScoped<CreatePersonUseCase>();
-
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<PersonMappings>();
+            });
         }
     }
 }

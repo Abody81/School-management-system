@@ -17,7 +17,7 @@ public class DeletePersonUseCase
 )
 {
 
-    public async Task<Result> ExecuteAsync(DeletePersonCommand command)
+    public async Task<Result> ExecuteAsync(DeletePersonCommand command, CancellationToken ct)
     {
         if (command.PersonId < 1)
             return PersonErrors.InvalidId;
@@ -26,12 +26,12 @@ public class DeletePersonUseCase
 
         try
         {
-            ImagePath = await _repo.GetImagePath(command.PersonId);
+            ImagePath = await _repo.GetImagePath(command.PersonId, ct);
 
             if (ImagePath == null)
                 return PersonErrors.PersonNotFound;
 
-            if (await _repo.Delete(command.PersonId) > 0)
+            if (await _repo.Delete(command.PersonId, ct) > 0)
             {
                 _imageService.DeleteImage(ImagePath);
 

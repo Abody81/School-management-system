@@ -7,14 +7,14 @@ namespace SMS.Application.UseCases.People.Queries;
 
 public class GetPerson(IPersonRepository _repo, ILogger<GetPerson> _logger)
 {
-    public async Task<Result<Person>> ExecuteAsync(int personId)
+    public async Task<Result<Person>> ExecuteAsync(int personId, CancellationToken ct)
     {
         try
         {
             if (personId < 1)
                 return Result<Person>.Failure(PersonErrors.InvalidId, new () { { "PersonId", personId } });
 
-            Person? person = await _repo.GetPersonById(personId);
+            Person? person = await _repo.GetPersonById(personId, ct, false);
 
             if (person is null)
                 return Result<Person>.Failure(PersonErrors.PersonNotFound, new() { { "PersonId", personId } });

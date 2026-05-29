@@ -16,15 +16,15 @@ public class UpdatePersonUseCase(ILogger<UpdatePersonUseCase> _logger,
      IUnitOfWork _uow)
 {
 
-    public async Task<Result> ExecuteAsync(UpdatePersonCommand personCommand)
+    public async Task<Result> ExecuteAsync(UpdatePersonCommand personCommand, CancellationToken ct)
     {
         try
         {
-            Person? OldPerson = await _repo.GetPersonById(personCommand.Id, true);
+            Person? OldPerson = await _repo.GetPersonById(personCommand.Id, ct, true);
             if (OldPerson == null)
                 return Result<bool>.Failure(PersonErrors.PersonNotFound, new() { { "PersonId", personCommand.Id } });
         
-            var UniqueValidationResult = await UniqueValidationAsync(personCommand);
+            var UniqueValidationResult = await UniqueValidationAsync(personCommand, ct);
             if (!UniqueValidationResult.IsSuccess) return Result<bool>.Failure(UniqueValidationResult);
 
             return await UpdatePersonAsync(personCommand ,OldPerson);
@@ -97,19 +97,19 @@ public class UpdatePersonUseCase(ILogger<UpdatePersonUseCase> _logger,
         }
     }
 
-    private async Task<Result> UniqueValidationAsync(UpdatePersonCommand person)
+    private async Task<Result> UniqueValidationAsync(UpdatePersonCommand person, CancellationToken ct)
     {
         var Result = new Result(ErrorType.Reserved); // by default is Success but when add use AddError change to !Success
 
         if (!string.IsNullOrEmpty(person.PhoneNumber))
         {
-            var IsPhoneNumberExist = await _repo.IsPhoneNumberReserved(person.Id, person.PhoneNumber);
+            var IsPhoneNumberExist = await _repo.IsPhoneNumberReserved(person.Id, person.PhoneNumber, ct);
 
             if (IsPhoneNumberExist)
                 Result.AddError(PersonErrors.PhoneNumberReserved);
         }
 
-        var IsNationalNumberExist = await _repo.IsNationalNumberReserved(person.Id, person.NationalNumber);
+        var IsNationalNumberExist = await _repo.IsNationalNumberReserved(person.Id, person.NationalNumber, ct);
 
         if (IsNationalNumberExist)
             Result.AddError(PersonErrors.NationalNumberReserved);
